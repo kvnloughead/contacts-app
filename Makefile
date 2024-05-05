@@ -21,7 +21,7 @@ confirm:
 ## run/web: run the cmd/web application
 .PHONY: run/web
 run/web:
-	@go run ./cmd/web -dsn=${CONTACTS_DB_DSN} -port=4000
+	@go run ./cmd/web -db-dsn=${CONTACTS_DB_DSN} -port=4000
 
 ## db/psql: connect the the database using psql
 .PHONY: db/psql

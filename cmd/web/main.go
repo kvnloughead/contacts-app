@@ -25,6 +25,12 @@ import (
 type config struct {
 	port int
 	env  string
+	db   struct {
+		dsn          string
+		maxOpenConns int
+		maxIdleConns int
+		maxIdleTime  time.Duration
+	}
 }
 
 // A struct containing application-wide dependencies.
@@ -47,7 +53,11 @@ func main() {
 		"Environment (development|staging|production)")
 
 	// Read DB-related settings from CLI flags.
-	dsn := flag.String("dsn", "", "PostgreSQL DSN")
+	flag.StringVar(&cfg.db.dsn, "db-dsn", "", "Postgresql DSN")
+	flag.IntVar(&cfg.db.maxOpenConns, "db-max-open-conns", 25, "Postgresql max open connections")
+	flag.IntVar(&cfg.db.maxIdleConns, "db-max-idle-conns", 25, "Postgresql max idle connections")
+	flag.DurationVar(&cfg.db.maxIdleTime, "db-max-idle-time", 15*time.Minute, "Postgresql max connection idle time")
+
 	debug := flag.Bool("debug", false, "Run in debug mode")
 	flag.Parse()
 
@@ -57,7 +67,7 @@ func main() {
 	}))
 
 	// Initialize sql.DB connection pool for the provided DSN.
-	db, err := openDB(*dsn)
+	db, err := openDB(cfg.db.dsn)
 	if err != nil {
 		logger.Error(err.Error())
 		os.Exit(1)
