@@ -23,9 +23,10 @@ import (
 // specified as CLI flags when application starts, and have defaults provided
 // in case they are omitted.
 type config struct {
-	port int
-	env  string
-	db   struct {
+	port  int
+	env   string
+	debug bool
+	db    struct {
 		dsn          string
 		maxOpenConns int
 		maxIdleConns int
@@ -35,12 +36,12 @@ type config struct {
 
 // A struct containing application-wide dependencies.
 type application struct {
+	config         config
 	logger         *slog.Logger
 	contacts       models.ContactModelInterface
 	templateCache  map[string]*template.Template
 	formDecoder    *form.Decoder
 	sessionManager *scs.SessionManager
-	debug          bool
 }
 
 func main() {
@@ -51,6 +52,7 @@ func main() {
 		"env",
 		"development",
 		"Environment (development|staging|production)")
+	flag.BoolVar(&cfg.debug, "debug", false, "Run in debug mode")
 
 	// Read DB-related settings from CLI flags.
 	flag.StringVar(&cfg.db.dsn, "db-dsn", "", "Postgresql DSN")
@@ -58,7 +60,6 @@ func main() {
 	flag.IntVar(&cfg.db.maxIdleConns, "db-max-idle-conns", 25, "Postgresql max idle connections")
 	flag.DurationVar(&cfg.db.maxIdleTime, "db-max-idle-time", 15*time.Minute, "Postgresql max connection idle time")
 
-	debug := flag.Bool("debug", false, "Run in debug mode")
 	flag.Parse()
 
 	// Initialize structured logger to stdout with default settings.
@@ -95,7 +96,6 @@ func main() {
 		templateCache:  templateCache,
 		formDecoder:    formDecoder,
 		sessionManager: sessionManager,
-		debug:          *debug,
 	}
 
 	// Initial http server with address route handler.
