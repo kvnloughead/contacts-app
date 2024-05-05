@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"database/sql"
 	"flag"
 	"fmt"
@@ -19,6 +20,13 @@ import (
 	_ "github.com/lib/pq"
 )
 
+type dbConfig struct {
+	dsn          string
+	maxOpenConns int
+	maxIdleConns int
+	maxIdleTime  time.Duration
+}
+
 // config is a struct containing configuration settings. These settings are
 // specified as CLI flags when application starts, and have defaults provided
 // in case they are omitted.
@@ -26,12 +34,7 @@ type config struct {
 	port  int
 	env   string
 	debug bool
-	db    struct {
-		dsn          string
-		maxOpenConns int
-		maxIdleConns int
-		maxIdleTime  time.Duration
-	}
+	db    dbConfig
 }
 
 // A struct containing application-wide dependencies.
@@ -68,7 +71,7 @@ func main() {
 	}))
 
 	// Initialize sql.DB connection pool for the provided DSN.
-	db, err := openDB(cfg.db.dsn)
+	db, err := openDB(cfg.db)
 	if err != nil {
 		logger.Error(err.Error())
 		os.Exit(1)
@@ -119,15 +122,24 @@ func main() {
 	os.Exit(1)
 }
 
-// Returns an sql.DB connection pool for the supplied data source name (DSN).
-func openDB(dsn string) (*sql.DB, error) {
-	db, err := sql.Open("postgres", dsn)
+// openDB returns an postgres sql.DB connection pool for the supplied DSN. It
+// accepts a configuration struct as an argument, using its fields to set the
+// DSN and other settings.
+func openDB(dbCfg dbConfig) (*sql.DB, error) {
+	db, err := sql.Open("postgres", dbCfg.dsn)
 	if err != nil {
 		return nil, err
 	}
 
+	db.SetMaxOpenConns(dbCfg.maxOpenConns)
+	db.SetMaxIdleConns(dbCfg.maxIdleConns)
+	db.SetConnMaxIdleTime(dbCfg.maxIdleTime)
+
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+
 	// Verify that the connection is alive, reestablishing it if necessary.
-	err = db.Ping()
+	err = db.PingContext(ctx)
 	if err != nil {
 		db.Close()
 		return nil, err
