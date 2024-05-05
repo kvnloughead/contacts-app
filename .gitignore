@@ -7,6 +7,10 @@ venv/
 .venv/
 .env/
 
+# Environmental variables
+.env
+.envrc
+
 # IDE files
 .vscode/
 .idea/

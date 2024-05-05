@@ -16,7 +16,6 @@ import (
 	"github.com/kvnloughead/contacts-app/internal/models"
 
 	// Aliasing with a blank identifier because the driver isn't used explicitly.
-	_ "github.com/go-sql-driver/mysql"
 	_ "github.com/lib/pq"
 )
 
@@ -34,8 +33,8 @@ func main() {
 	addr := flag.String("addr", ":4000", "HTTP Network Address")
 	dsn := flag.String(
 		"dsn",
-		"web:devpass@/snippetbox?parseTime=true",
-		"MySQL data source name (aka 'connection string')")
+		"",
+		"PostgreSQL data source name (aka 'connection string')")
 	debug := flag.Bool("debug", false, "Run in debug mode")
 	flag.Parse()
 
@@ -106,7 +105,7 @@ func main() {
 
 // Returns an sql.DB connection pool for the supplied data source name (DSN).
 func openDB(dsn string) (*sql.DB, error) {
-	db, err := sql.Open("mysql", dsn)
+	db, err := sql.Open("postgres", dsn)
 	if err != nil {
 		return nil, err
 	}
