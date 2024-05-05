@@ -1,9 +1,9 @@
 package main
 
 import (
-	"crypto/tls"
 	"database/sql"
 	"flag"
+	"fmt"
 	"html/template"
 	"log/slog"
 	"net/http"
@@ -19,6 +19,14 @@ import (
 	_ "github.com/lib/pq"
 )
 
+// config is a struct containing configuration settings. These settings are
+// specified as CLI flags when application starts, and have defaults provided
+// in case they are omitted.
+type config struct {
+	port int
+	env  string
+}
+
 // A struct containing application-wide dependencies.
 type application struct {
 	logger         *slog.Logger
@@ -30,11 +38,16 @@ type application struct {
 }
 
 func main() {
-	addr := flag.String("addr", ":4000", "HTTP Network Address")
-	dsn := flag.String(
-		"dsn",
-		"",
-		"PostgreSQL data source name (aka 'connection string')")
+	var cfg config
+
+	flag.IntVar(&cfg.port, "port", 4000, "The port to run the app on.")
+	flag.StringVar(&cfg.env,
+		"env",
+		"development",
+		"Environment (development|staging|production)")
+
+	// Read DB-related settings from CLI flags.
+	dsn := flag.String("dsn", "", "PostgreSQL DSN")
 	debug := flag.Bool("debug", false, "Run in debug mode")
 	flag.Parse()
 
@@ -75,17 +88,10 @@ func main() {
 		debug:          *debug,
 	}
 
-	// Struct containing non-default TLS settings.
-	tlsConfig := tls.Config{
-		// For performance, only use curves with assembly implementations.
-		CurvePreferences: []tls.CurveID{tls.X25519, tls.CurveP256},
-	}
-
 	// Initial http server with address route handler.
 	srv := &http.Server{
-		Addr:         *addr,
+		Addr:         fmt.Sprintf(":%d", cfg.port),
 		Handler:      app.routes(),
-		TLSConfig:    &tlsConfig,
 		IdleTimeout:  time.Minute,
 		ReadTimeout:  5 * time.Second,
 		WriteTimeout: 10 * time.Second,
