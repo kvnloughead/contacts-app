@@ -1,0 +1,17 @@
+{{ define "title" }}Snippet #{{ .Snippet.ID }}{{ end }}
+
+{{ define "main" }}
+  {{ with .Snippet }}
+    <article class="snippet">
+      <div class="metadata">
+        <h2>{{ .Title }}</h2>
+        <span>#{{ .ID }}</span>
+      </div>
+      <pre><code>{{ .Content }}</code></pre>
+      <footer class="metadata">
+        <time>Created: {{ humanDate .Created }}</time>
+        <time>Expires: {{ humanDate .Expires }}</time>
+      </footer>
+    </article>
+  {{ end }}
+{{ end }}

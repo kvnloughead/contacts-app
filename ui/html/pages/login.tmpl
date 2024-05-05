@@ -1,0 +1,37 @@
+{{ define "title" }}Login{{ end }}
+
+{{ define "main" }}
+  <form class="flex-column" action="/user/login" method="POST" novalidate>
+    <input type="hidden" name="csrf_token" value="{{ .CSRFToken }}" />
+    <!--
+    Display all errors that aren't associated with a specific input field.
+    This allows us to keep authentication related errors generic, for security.
+  
+    https://cheatsheetseries.owasp.org/cheatsheets/Authentication_Cheat_Sheet.html#authentication-responses
+    -->
+    {{ range .Form.NonFieldErrors }}
+      <div class="error">{{ . }}</div>
+    {{ end }}
+    <label for="email-input">
+      Email:
+      {{ with .Form.FieldErrors.email }}
+        <span class="error">{{ . }}</span>
+      {{ end }}
+      <input
+        id="email-input"
+        name="email"
+        type="email"
+        value="{{ .Form.Email }}"
+      />
+    </label>
+    <label for="password-input">
+      Password:
+      {{ with .Form.FieldErrors.password }}
+        <span class="error">{{ . }}</span>
+      {{ end }}
+      <!-- Value of password input omitted to prevent caching by browser. -->
+      <input id="password-input" name="password" type="password" />
+    </label>
+    <input type="submit" value="Log in" />
+  </form>
+{{ end }}

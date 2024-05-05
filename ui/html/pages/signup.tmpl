@@ -1,0 +1,35 @@
+{{ define "title" }}Signup{{ end }}
+
+{{ define "main" }}
+  <form class="flex-column" action="/user/signup" method="POST" novalidate>
+    <input type="hidden" name="csrf_token" value="{{ .CSRFToken }}" />
+    <label for="name-input">
+      Name:
+      {{ with .Form.FieldErrors.name }}
+        <span class="error">{{ . }}</span>
+      {{ end }}
+      <input id="name-input" name="name" type="text" value="{{ .Form.Name }}" />
+    </label>
+    <label for="email-input">
+      Email:
+      {{ with .Form.FieldErrors.email }}
+        <span class="error">{{ . }}</span>
+      {{ end }}
+      <input
+        id="email-input"
+        name="email"
+        type="email"
+        value="{{ .Form.Email }}"
+      />
+    </label>
+    <label for="password-input">
+      Password:
+      {{ with .Form.FieldErrors.password }}
+        <span class="error">{{ . }}</span>
+      {{ end }}
+      <!-- Value of password input omitted to prevent caching by browser. -->
+      <input id="password-input" name="password" type="password" />
+    </label>
+    <input type="submit" value="Sign up" />
+  </form>
+{{ end }}

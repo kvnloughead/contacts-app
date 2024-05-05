@@ -1,0 +1,26 @@
+{{ define "title" }}About{{ end }}
+
+{{ define "main" }}
+  <section class="about">
+    <h2>About</h2>
+    <p>
+      A website for sharing arbitrary snippets of text. Perfect for all your
+      haiku and/or joke sharing needs. Written in Go, using MYSQL and HTML
+      templates from html/template following along with Alex Edwards' excellent
+      book,
+      <a href="https://lets-go.alexedwards.net/">Let's Go</a>.
+    </p>
+    <p>Features include:</p>
+    <ul>
+      <li>
+        Properly validated forms for users to register, log in, and create new
+        snippets.
+      </li>
+      <li>Logged in status is persisted via session cookies.</li>
+      <li>
+        Any can browse and view snippets, but only logged in users can create
+        new snippets.
+      </li>
+    </ul>
+  </section>
+{{ end }}
