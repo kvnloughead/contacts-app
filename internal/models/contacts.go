@@ -25,7 +25,7 @@ type ContactModel struct {
 type ContactModelInterface interface {
 	Insert(first string, last string, phone string, email string) (int, error)
 	Get(id int) (Contact, error)
-	Latest() ([]Contact, error)
+	GetAll() ([]Contact, error)
 }
 
 // Insert adds a new contact into the DB.
@@ -72,9 +72,10 @@ func (m *ContactModel) Get(id int) (Contact, error) {
 	return s, nil
 }
 
-func (m *ContactModel) Latest() ([]Contact, error) {
+// GetAll retrieves all contacts from the DB.
+func (m *ContactModel) GetAll() ([]Contact, error) {
 	query := `SELECT id, first, last, phone, email FROM contacts
-	ORDER BY id DESC LIMIT 10`
+	ORDER BY first`
 
 	// Query will return an sql.Rows result set containing 10 latest entries.
 	rows, err := m.DB.Query(query)
@@ -89,7 +90,7 @@ func (m *ContactModel) Latest() ([]Contact, error) {
 
 	for rows.Next() {
 		var s Contact
-		err = rows.Scan(&s.ID, &s.First, &s.Last, &s.Phone, &s.Email, &s.Created)
+		err = rows.Scan(&s.ID, &s.First, &s.Last, &s.Phone, &s.Email)
 		if err != nil {
 			return nil, err
 		}

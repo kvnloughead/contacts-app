@@ -9,14 +9,19 @@
         <th>Last</th>
         <th>Phone</th>
         <th>Email</th>
+        <th>ID</th>
       </tr>
       {{ range .Contacts }}
         <tr>
           <td>
-            <a href="/contacts/view/{{ .ID }}">{{ .First }}{{ .Last }}</a>
+            <a href="/contacts/view/{{ .ID }}">{{ .First }}</a>
           </td>
-          <td>{{ humanDate .Created }}</td>
-          <td>#{{ .ID }}</td>
+          <td>
+            <a href="/contacts/view/{{ .ID }}">{{ .Last }}</a>
+          </td>
+          <td>{{ .Phone }}</td>
+          <td>{{ .Email }}</td>
+          <td>{{ .ID }}</td>
         </tr>
       {{ end }}
     </table>

@@ -22,7 +22,7 @@ func ping(w http.ResponseWriter, r *http.Request) {
 // Displays home page in response to GET /. If we were using http.ServeMux we
 // would have to check the URL, but with httprouter.Router, "/" is exclusive.
 func (app *application) home(w http.ResponseWriter, r *http.Request) {
-	contacts, err := app.contacts.Latest()
+	contacts, err := app.contacts.GetAll()
 	if err != nil {
 		app.serverError(w, r, err)
 		return
