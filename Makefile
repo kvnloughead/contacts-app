@@ -28,3 +28,14 @@ run/web:
 db/psql:
 	psql ${CONTACTS_DB_DSN}
 
+## db/migrations/create name=$1: generate new migration files
+.PHONY: db/migrations/new
+db/migrations/new:
+	@echo 'Creating migration files for ${name}'
+	migrate create -seq -ext=.sql -dir=./migrations ${name}
+
+## db/migrations/up: apply all 'up' migrations
+.PHONY: db/migrations/up
+db/migrations/up: confirm
+	@echo 'Running all up migrations'
+	migrate -path ./migrations -database ${CONTACTS_DB_DSN} up
