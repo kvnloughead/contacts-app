@@ -1,17 +1,19 @@
-{{ define "title" }}Snippet #{{ .Snippet.ID }}{{ end }}
+{{ define "title" }}Contact #{{ .Contact.ID }}{{ end }}
 
 {{ define "main" }}
-  {{ with .Snippet }}
-    <article class="snippet">
-      <div class="metadata">
-        <h2>{{ .Title }}</h2>
-        <span>#{{ .ID }}</span>
-      </div>
-      <pre><code>{{ .Content }}</code></pre>
-      <footer class="metadata">
-        <time>Created: {{ humanDate .Created }}</time>
-        <time>Expires: {{ humanDate .Expires }}</time>
-      </footer>
+  {{ with .Contact }}
+    <article class="contact">
+      <h2>{{ .First }} {{ .Last }}</h2>
+      <dl>
+        <div>
+          <dt>Phone:</dt>
+          <dd>{{ .Phone }}</dd>
+        </div>
+        <div>
+          <dt>Email:</dt>
+          <dd>{{ .Email }}</dd>
+        </div>
+      </dl>
     </article>
   {{ end }}
 {{ end }}

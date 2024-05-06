@@ -19,8 +19,8 @@ Dynamic unprotected routes:
   - GET  /														display the home page
   - GET  /about												display the about page
   - GET  /ping 							  				responses with 200 OK
-  - GET  /contacts/view/:id    				display a specific contact
-  - GET  /contacts/create   				    display form to create contacts
+  - GET  /contacts/view/:id        		display a specific contact
+  - GET  /contacts/create   			    display form to create contacts
   - POST /contacts/create      				create a new contact
 */
 func (app *application) routes() http.Handler {

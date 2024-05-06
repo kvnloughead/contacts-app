@@ -13,15 +13,14 @@
       </tr>
       {{ range .Contacts }}
         <tr>
-          <td>
-            <a href="/contacts/view/{{ .ID }}">{{ .First }}</a>
-          </td>
-          <td>
-            <a href="/contacts/view/{{ .ID }}">{{ .Last }}</a>
-          </td>
+          <td>{{ .First }}</td>
+          <td>{{ .Last }}</td>
           <td>{{ .Phone }}</td>
           <td>{{ .Email }}</td>
-          <td>{{ .ID }}</td>
+          <td>
+            <a href="/contacts/{{ .ID }}/edit">Edit</a>
+            <a href="/contacts/view/{{ .ID }}">View</a>
+          </td>
         </tr>
       {{ end }}
     </table>

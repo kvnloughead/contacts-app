@@ -50,7 +50,7 @@ func (m *ContactModel) Insert(
 // If no matching Contact is found, a models.ErrNoRecord error is returned.
 func (m *ContactModel) Get(id int) (Contact, error) {
 	query := `SELECT id, first, last, phone, email FROM contacts
-	WHERE id = ?`
+	WHERE id = $1`
 
 	// Executes a query statement that will return no more than one row.
 	// Accepts the query statement and a variadic list of placeholder values.
@@ -60,7 +60,7 @@ func (m *ContactModel) Get(id int) (Contact, error) {
 	// If no rows were found, an sql.ErrNoRows error is returned.
 	// If multiple rows were found, the first row is used.
 	var s Contact
-	err := row.Scan(&s.ID, &s.First, &s.Last, &s.Phone, &s.Email, &s.Created)
+	err := row.Scan(&s.ID, &s.First, &s.Last, &s.Phone, &s.Email)
 	if err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
 			return Contact{}, ErrNoRecord
