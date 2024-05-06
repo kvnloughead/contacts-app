@@ -1,65 +1,46 @@
-{{ define "title" }}Create a New Snippet{{ end }}
+{{ define "title" }}Create a New Contact{{ end }}
 
 {{ define "main" }}
-  <form class="flex-column" action="/snippet/create" method="POST">
+  <form class="flex-column" action="/contacts/create" method="POST">
     <input type="hidden" name="csrf_token" value="{{ .CSRFToken }}" />
-    <label for="title-input">
-      Title:
-      <!-- If Form.FieldErrors.title is non-empty, it's value will be assigned to dot (.) and the error span will be rendered. -->
-      {{ with .Form.FieldErrors.title }}
+    <label for="first-input">
+      First name:
+      <!-- If Form.FieldErrors.name is non-empty, it's value will be assigned to dot (.) and the error span will be rendered. -->
+      {{ with .Form.FieldErrors.first }}
         <span class="error">{{ . }}</span>
       {{ end }}
       <input
-        id="title-input"
-        name="title"
+        id="first-name-input"
+        name="first"
         type="text"
-        value="{{ .Form.Title }}"
+        value="{{ .Form.First }}"
       />
     </label>
-    <label for="content-input">
-      Text:
-      {{ with .Form.FieldErrors.content }}
+    <label for="last-name-input">
+      Last name:
+      {{ with .Form.FieldErrors.last }}
         <span class="error">{{ . }}</span>
       {{ end }}
-      <textarea id="content-input" name="content">{{ .Form.Content }}</textarea>
+      <input id="last-name-input" name="last" type="text" value="{{ .Form.Last }}">
     </label>
 
-    <fieldset class="radio-buttons">
-      <legend>
-        Delete in:
-        {{ with .Form.FieldErrors.expires }}
-          <span class="error">{{ . }}</span>
-        {{ end }}
-      </legend>
+    <label for="phone-input">
+      Phone number:
+      {{ with .Form.FieldErrors.phone }}
+        <span class="error">{{ . }}</span>
+      {{ end }}
+      <input id="phone-input" name="phone" type="text" value="{{ .Form.Phone }}">
+    </label>
 
-      <label for="expires">
-        <input
-          type="radio"
-          name="expires"
-          value="365"
-          {{ if (eq .Form.Expires 365) }}checked{{ end }}
-        />
-        One Year
-      </label>
-      <label for="expires">
-        <input
-          type="radio"
-          name="expires"
-          value="7"
-          {{ if (eq .Form.Expires 7) }}checked{{ end }}
-        />
-        One Week
-      </label>
-      <label for="expires">
-        <input
-          type="radio"
-          name="expires"
-          value="1"
-          {{ if (eq .Form.Expires 1) }}checked{{ end }}
-        />
-        One Day
-      </label>
+    <label for="email-input">
+      Email:
+      {{ with .Form.FieldErrors.email }}
+        <span class="error">{{ . }}</span>
+      {{ end }}
+      <input id="email-input" name="email" type="text" value="{{ .Form.Email }}">
+    </label>
+
     </fieldset>
-    <input type="submit" value="Publish snippet" />
+    <input type="submit" value="Create contact" />
   </form>
 {{ end }}

@@ -32,25 +32,18 @@ type ContactModelInterface interface {
 // Returns the ID of the inserted record or an error.
 func (m *ContactModel) Insert(
 	first string, last string, phone string, email string) (int, error) {
-
-	// The query to be executed. Query statements allow for '?' as placeholders.
 	query := `
 		INSERT INTO contacts (first, last, phone, email, created)
-		VALUES(?, ?, ?, ?, UTC_TIMESTAMP()`
+		VALUES ($1, $2, $3, $4, CURRENT_TIMESTAMP)
+		RETURNING id;`
 
-	// Execute query. Exec accepts variadic values for the query placeholders.
-	result, err := m.DB.Exec(query, first, last, phone, email)
+	var lastInsertId int
+	err := m.DB.QueryRow(query, first, last, phone, email).Scan(&lastInsertId)
 	if err != nil {
 		return 0, err
 	}
 
-	// Get ID of the inserted record as an int64.
-	id, err := result.LastInsertId()
-	if err != nil {
-		return 0, err
-	}
-
-	return int(id), nil
+	return int(lastInsertId), nil
 }
 
 // The Get method retrieves a contact by its ID.
