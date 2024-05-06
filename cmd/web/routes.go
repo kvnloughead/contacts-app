@@ -19,9 +19,9 @@ Dynamic unprotected routes:
   - GET  /														display the home page
   - GET  /about												display the about page
   - GET  /ping 							  				responses with 200 OK
-  - GET  /contact/view/:id    				display a specific contact
-  - GET  /contact/create   				    display form to create contacts
-  - POST /contact/create      				create a new contact
+  - GET  /contacts/view/:id    				display a specific contact
+  - GET  /contacts/create   				    display form to create contacts
+  - POST /contacts/create      				create a new contact
 */
 func (app *application) routes() http.Handler {
 	router := httprouter.New()
@@ -50,10 +50,10 @@ func (app *application) routes() http.Handler {
 	// router.HandlerFunc.
 	router.Handler(http.MethodGet, "/", dynamic.ThenFunc(app.home))
 	router.Handler(http.MethodGet, "/about", dynamic.ThenFunc(app.about))
-	router.Handler(http.MethodGet, "/contact/view/:id", dynamic.ThenFunc(app.contactView))
+	router.Handler(http.MethodGet, "/contacts/view/:id", dynamic.ThenFunc(app.contactView))
 
-	router.Handler(http.MethodGet, "/contact/create", dynamic.ThenFunc(app.contactCreate))
-	router.Handler(http.MethodPost, "/contact/create", dynamic.ThenFunc(app.contactCreatePost))
+	router.Handler(http.MethodGet, "/contacts/create", dynamic.ThenFunc(app.contactCreate))
+	router.Handler(http.MethodPost, "/contacts/create", dynamic.ThenFunc(app.contactCreatePost))
 
 	// Initialize chain of standard pre-request middlewares.
 	standard := alice.New(app.recoverPanic, app.logRequest, secureHeaders)

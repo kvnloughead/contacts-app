@@ -44,7 +44,7 @@ func (app *application) about(w http.ResponseWriter, r *http.Request) {
 // Contact handlers
 //
 
-// Struct containing form fields for the /contact/create form.
+// Struct containing form fields for the /contacts/create form.
 type contactCreateForm struct {
 	First               string     `form:"first"`
 	Last                string     `form:"last"`
@@ -139,5 +139,5 @@ func (app *application) contactCreatePost(w http.ResponseWriter, r *http.Request
 	app.sessionManager.Put(r.Context(), string(flash), "Contact successfully created!")
 
 	// Redirect to page containing the new contact.
-	http.Redirect(w, r, fmt.Sprintf("/contact/view/%d", id), http.StatusSeeOther)
+	http.Redirect(w, r, fmt.Sprintf("/contacts/view/%d", id), http.StatusSeeOther)
 }
