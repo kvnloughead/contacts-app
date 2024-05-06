@@ -127,7 +127,7 @@ func (app *application) contactCreatePost(w http.ResponseWriter, r *http.Request
 	}
 
 	// Insert new record or respond with a server error.
-	id, err := app.contacts.Insert(form.First, form.Last, form.Email, form.Phone)
+	id, err := app.contacts.Insert(form.First, form.Last, form.Phone, form.Email)
 	if err != nil {
 		app.serverError(w, r, err)
 		return
