@@ -23,6 +23,13 @@ confirm:
 run/web:
 	@go run ./cmd/web -db-dsn=${CONTACTS_DB_DSN} -port=4000
 
+## run/air: run server using air for live reloading
+.PHONY: run/air
+run/air:
+	@export CONTACTS_DB_DSN=$(CONTACTS_DB_DSN)
+	export PORT=4000
+	air
+
 ## db/psql: connect the the database using psql
 .PHONY: db/psql
 db/psql:
