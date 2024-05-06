@@ -52,12 +52,8 @@ func (app *application) routes() http.Handler {
 	router.Handler(http.MethodGet, "/about", dynamic.ThenFunc(app.about))
 	router.Handler(http.MethodGet, "/contact/view/:id", dynamic.ThenFunc(app.contactView))
 
-	// Middleware chain for protected routes. Includes all middleware from dynamic
-	// chain, as well as app.requireAuthentication.
-	protected := dynamic.Append(app.requireAuthentication)
-
-	router.Handler(http.MethodGet, "/contact/create", protected.ThenFunc(app.contactCreate))
-	router.Handler(http.MethodPost, "/contact/create", protected.ThenFunc(app.contactCreatePost))
+	router.Handler(http.MethodGet, "/contact/create", dynamic.ThenFunc(app.contactCreate))
+	router.Handler(http.MethodPost, "/contact/create", dynamic.ThenFunc(app.contactCreatePost))
 
 	// Initialize chain of standard pre-request middlewares.
 	standard := alice.New(app.recoverPanic, app.logRequest, secureHeaders)

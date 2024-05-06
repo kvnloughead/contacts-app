@@ -1,18 +1,19 @@
 {{ define "title" }}Home{{ end }}
 
 {{ define "main" }}
-  <h2>Latest Snippets</h2>
-  {{ if .Snippets }}
+  <h2>Your Contacts</h2>
+  {{ if .Contacts }}
     <table>
       <tr>
-        <th>Title</th>
-        <th>Created</th>
-        <th>ID</th>
+        <th>First</th>
+        <th>Last</th>
+        <th>Phone</th>
+        <th>Email</th>
       </tr>
-      {{ range .Snippets }}
+      {{ range .Contacts }}
         <tr>
           <td>
-            <a href="/snippet/view/{{ .ID }}">{{ .Title }}</a>
+            <a href="/contacts/view/{{ .ID }}">{{ .First }}{{ .Last }}</a>
           </td>
           <td>{{ humanDate .Created }}</td>
           <td>#{{ .ID }}</td>

@@ -4,23 +4,17 @@
   <section class="about">
     <h2>About</h2>
     <p>
-      A website for sharing arbitrary snippets of text. Perfect for all your
-      haiku and/or joke sharing needs. Written in Go, using MYSQL and HTML
-      templates from html/template following along with Alex Edwards' excellent
-      book,
-      <a href="https://lets-go.alexedwards.net/">Let's Go</a>.
+      A website for storing all your contacts. Written in Go, using Postgresql
+      and HTML templates from html/template. The application is mostly derived
+      from Alex Edwards' excellent books,
+      <a href="https://lets-go.alexedwards.net/">Let's Go</a> and
+      <a href="https://lets-go-further.alexedwards.net/">Let's Go Further</a>.
     </p>
-    <p>Features include:</p>
-    <ul>
-      <li>
-        Properly validated forms for users to register, log in, and create new
-        snippets.
-      </li>
-      <li>Logged in status is persisted via session cookies.</li>
-      <li>
-        Any can browse and view snippets, but only logged in users can create
-        new snippets.
-      </li>
-    </ul>
+    <p>
+      This is a work in progress. The intention is to build out the basic
+      application along the lines of the Snippetbox app from Let's Go, but using
+      postgresql instead of mysql, and separating the authentication and
+      authorization logic into a separate module.
+    </p>
   </section>
 {{ end }}
