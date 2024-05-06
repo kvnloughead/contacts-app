@@ -28,7 +28,7 @@ run/web:
 db/psql:
 	psql ${CONTACTS_DB_DSN}
 
-## db/migrations/create name=$1: generate new migration files
+## db/migrations/new name=$1: generate new migration files
 .PHONY: db/migrations/new
 db/migrations/new:
 	@echo 'Creating migration files for ${name}'

@@ -14,3 +14,5 @@ require (
 	github.com/justinas/nosurf v1.1.1
 	github.com/lib/pq v1.10.9
 )
+
+require github.com/alexedwards/scs/postgresstore v0.0.0-20240316134038-7e11d57e8885 // indirect

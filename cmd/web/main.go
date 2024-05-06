@@ -11,7 +11,7 @@ import (
 	"os"
 	"time"
 
-	"github.com/alexedwards/scs/mysqlstore"
+	"github.com/alexedwards/scs/postgresstore"
 	"github.com/alexedwards/scs/v2"
 	"github.com/go-playground/form/v4"
 	"github.com/kvnloughead/contacts-app/internal/models"
@@ -88,7 +88,7 @@ func main() {
 	// Initialize session manager, using our db as its store. We then add it to
 	// our dependency injector, and wrap our routes in its LoadAndSave middleware.
 	sessionManager := scs.New()
-	sessionManager.Store = mysqlstore.New(db)
+	sessionManager.Store = postgresstore.New(db)
 	sessionManager.Lifetime = 12 * time.Hour
 
 	formDecoder := form.NewDecoder()
