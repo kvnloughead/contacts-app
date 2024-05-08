@@ -1,0 +1,60 @@
+.nav {
+  border-bottom: 1px solid #e4e5e7;
+  padding: 17px 20px 15px;
+  background: #f7f9fa;
+  height: 60px;
+  color: #6a6c6f;
+  display: flex;
+  justify-content: space-between;
+}
+
+.nav a {
+  margin-right: 1.5em;
+  display: inline-block;
+}
+
+/* Override visited link styles for the sake of consistent appearance. */
+.nav a:visited {
+  color: var(--links);
+}
+
+.nav form {
+  display: inline-block;
+  margin-left: 1.5em;
+}
+
+.nav div {
+}
+
+.nav div:last-child {
+  text-align: right;
+}
+
+.nav div:last-child a {
+  margin-left: 1.5em;
+  margin-right: 0;
+}
+
+.nav a.live {
+  color: #34495e;
+  cursor: default;
+}
+
+.nav a.live:hover {
+  text-decoration: none;
+}
+
+.nav a.live:after {
+  content: "";
+  display: block;
+  position: relative;
+  left: calc(50% - 7px);
+  top: 9px;
+  width: 14px;
+  height: 14px;
+  background: #f7f9fa;
+  border-left: 1px solid #e4e5e7;
+  border-bottom: 1px solid #e4e5e7;
+  -moz-transform: rotate(45deg);
+  -webkit-transform: rotate(-45deg);
+}
