@@ -1,0 +1,32 @@
+table {
+  background: white;
+  border: 1px solid #e4e5e7;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+td,
+th {
+  text-align: left;
+  padding: 9px 18px;
+}
+
+th:last-child,
+td:last-child {
+  display: flex;
+  gap: 24px;
+  justify-content: flex-end;
+}
+
+tr {
+  border-bottom: 1px solid #e4e5e7;
+}
+
+tr:nth-child(2n) {
+  background-color: #f7f9fa;
+}
+
+/* Override visited link styles for the sake of consistent appearance. */
+td a:visited {
+  color: var(--links);
+}

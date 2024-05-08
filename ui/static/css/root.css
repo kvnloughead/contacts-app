@@ -1,0 +1,255 @@
+textarea,
+input:not([type="submit"]) {
+  font-size: 18px;
+  font-family: "Ubuntu Mono", monospace;
+}
+
+a.button,
+input[type="submit"] {
+  background-color: #62cb31;
+  border-radius: 3px;
+  color: #ffffff;
+  padding: 18px 27px;
+  border: none;
+  display: inline-block;
+  margin-top: 18px;
+  font-weight: 700;
+}
+
+a.button:hover,
+input[type="submit"]:hover {
+  background-color: #4eb722;
+  color: #ffffff;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+form div {
+  margin-bottom: 18px;
+}
+
+form div:last-child {
+  border-top: 1px dashed #e4e5e7;
+}
+
+form input[type="radio"] {
+  margin-left: 18px;
+}
+
+form input[type="text"],
+form input[type="password"],
+form input[type="email"] {
+  padding: 0.75em 18px;
+  width: 100%;
+}
+
+form input[type="text"],
+form input[type="password"],
+form input[type="email"],
+textarea {
+  color: #6a6c6f;
+  background: #ffffff;
+  border: 1px solid #e4e5e7;
+  border-radius: 3px;
+}
+
+form label {
+  display: inline-block;
+  margin-bottom: 9px;
+}
+
+.error {
+  color: #c0392b;
+  font-weight: bold;
+  display: block;
+}
+
+.error + textarea,
+.error + input {
+  border-color: #c0392b !important;
+  border-width: 2px !important;
+}
+
+textarea {
+  padding: 18px;
+  width: 100%;
+  height: 266px;
+}
+
+button {
+  background: none;
+  padding: 0;
+  border: none;
+  color: #62cb31;
+  text-decoration: none;
+}
+
+button:hover {
+  color: #4eb722;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+div.flash {
+  color: #ffffff;
+  font-weight: bold;
+  background-color: #34495e;
+  padding: 18px;
+  margin-bottom: 36px;
+  text-align: center;
+}
+
+div.error {
+  color: #ffffff;
+  background-color: #c0392b;
+  padding: 18px;
+  margin-bottom: 36px;
+  font-weight: bold;
+  text-align: center;
+}
+
+.flex-column {
+  display: flex;
+  flex-direction: column;
+}
+
+.radio-buttons {
+  display: flex;
+}
+
+.about p {
+  margin: 0 0 12px;
+}
+.about ul {
+  margin-left: 24px;
+}
+
+:root {
+  /* Colors */
+  --background-secondary: rgb(215, 206, 199, 0.6);
+  --background-main: rgb(215, 206, 199, 0.5);
+  --shadow: rgba(0, 0, 0, 0.4);
+  --shadow-light: rgba(0, 0, 0, 0.15);
+  --text-main: #000;
+  --text-grey: #535353;
+  --white: #fff;
+  --off-white: #f9f9f9;
+  --links: rgb(81, 162, 243);
+  --links-hover: rgba(81, 162, 243, 0.7);
+  --links-visited: rgb(188, 118, 250);
+  --inline-code: #d3cbcb;
+
+  /* General sizes */ /* media queries */
+  --fz-5xl: 52px;
+  --fz-4xl: 42px;
+  --fz-3xl: 36px;
+  --fz-2xl: 28px;
+  --fz-xl: 24px;
+  --fz-lg: 20px;
+  --fz-md: 16px;
+  --fz-sm: 14px;
+  --fz-xs: 12px;
+
+  --content-max-width: 820px;
+
+  --size-3xl: 90px;
+  --size-2xl: 70px;
+  --size-xl: 52px;
+  --size-lg: 30px;
+  --size-md: 20px;
+  --size-sm: 12px;
+  --size-xs: 8px;
+}
+
+@media screen and (max-width: 767px) {
+  :root {
+    --fz-5xl: 32px;
+    --fz-xl: 18px;
+    --fz-lg: 16px;
+
+    --size-xl: 36px;
+    --size-lg: 12px;
+  }
+}
+
+@media screen and (max-width: 500px) {
+  :root {
+    --fz-3xl: 28px;
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --text-main: #f9f9f9;
+    --text-grey: #d3cbcb;
+    --background-main: #1e1e1e;
+    --background-secondary: #2d2d30;
+    --off-white: #3e3e42;
+    --links: rgb(82, 165, 248);
+    --links-visited: #be7cf8;
+    --inline-code: #535353;
+  }
+}
+
+/* RESETS */
+
+/* prettier-ignore */
+h1, h2, h3, h4, h5, h6, p {
+  margin: 0;
+}
+
+fieldset {
+  padding: 0;
+  border: none;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-size: 18px;
+  font-family: "Ubuntu Mono", monospace;
+}
+
+/* UNIVERSAL STYLES */
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  line-height: 1.5;
+  background-color: #f1f3f6;
+  color: #34495e;
+  overflow-y: scroll;
+  display: flex;
+  flex-direction: column;
+}
+
+header,
+nav,
+main,
+footer {
+  padding: 2px calc((100% - 800px) / 2) 0;
+}
+
+h2 {
+  font-size: 22px;
+  margin-bottom: 36px;
+}
+
+a {
+  color: var(--links);
+  text-decoration: none;
+}
+
+a:visited {
+  color: var(--links-visited);
+}
+
+a:hover {
+  text-decoration: none;
+  color: var(--links-hover);
+  cursor: pointer;
+}

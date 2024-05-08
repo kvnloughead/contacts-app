@@ -21,13 +21,13 @@
         <h1><a href="/">Contact.app</a></h1>
         {{ template "nav" . }}
       </header>
-      <main>
+      <main class="main">
         {{ with .Flash }}
           <div class="flash">{{ . }}</div>
         {{ end }}
         {{ template "main" . }}
       </main>
-      <footer>
+      <footer class="footer">
         Powered by <a href="https://golang.org/">Go</a> in
         {{ .CurrentYear }}
       </footer>
