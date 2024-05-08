@@ -4,4 +4,5 @@
   min-height: calc(100vh - 345px);
   overflow: auto;
   background-color: var(--background-main);
+  flex-grow: 1;
 }
