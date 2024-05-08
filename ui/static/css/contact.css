@@ -1,0 +1,12 @@
+.contact {
+  background-color: var(--off-white);
+  border: 1px solid #e4e5e7;
+  /* box-shadow: 1px 1px 3px var(--shadow); */
+  border-radius: 8px;
+  padding: 12px 20px 20px;
+}
+
+.contact dl div {
+  display: flex;
+  gap: 12px;
+}
