@@ -11,7 +11,13 @@ import (
 // https://html.spec.whatwg.org/multipage/input.html#valid-e-mail-address
 var EmailRX = regexp.MustCompile("^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$")
 
-var PhoneNumberRX = regexp.MustCompile(`^\+?[0-9]{1,3}\s?\(?[0-9]{1,4}\)?[-.\s]?[0-9]{1,4}[-.\s]?[0-9]{1,9}$`)
+// PermissivePhoneNumberRX is a permissive phone number regex for US style
+// phone numbers. For examples of acceptable formats, see validator_test.go.
+var PermissivePhoneNumberRX = regexp.MustCompile(`^\+?(?:\(\d{3}\)|\d{3})[-\s]?\d{3}[-\s]?\d{4}$`)
+
+// E164PhoneNumber is the E.164 standard regex for international phone numbers.
+// https://www.itu.int/rec/T-REC-E.164/en
+var E164PhoneNumber = regexp.MustCompile(`^\+[1-9]\d{1,14}$`)
 
 type Validator struct {
 	// For errors that are associated with specific form fields.
@@ -80,4 +86,10 @@ func Matches(s string, rx *regexp.Regexp) bool {
 // Returns true if the value matches one of the permittedValues.
 func PermittedValue[T comparable](value T, permittedValues ...T) bool {
 	return slices.Contains(permittedValues, value)
+}
+
+// ValidatePhoneNumberInput checks that the phone number string matches either
+// a permissive US-style phone number regex, or the international E.164 regex.
+func ValidatePhoneNumberInput(phoneNumber string) bool {
+	return Matches(phoneNumber, PermissivePhoneNumberRX) || Matches(phoneNumber, E164PhoneNumber)
 }

@@ -115,8 +115,9 @@ func (app *application) contactCreatePost(w http.ResponseWriter, r *http.Request
 	form.CheckField(validator.MaxChars(form.Last, 100), "last", "This can't contain more than 100 characters.")
 	form.CheckField(validator.NotBlank(form.Email), "email", "This field can't be blank.")
 	form.CheckField(validator.Matches(form.Email, validator.EmailRX), "email", "Invalid email.")
+
 	form.CheckField(validator.NotBlank(form.Phone), "phone", "This field can't be blank.")
-	form.CheckField(validator.Matches(form.Phone, validator.PhoneNumberRX), "phone", "Invalid phone number.")
+	form.CheckField(validator.ValidatePhoneNumberInput(form.Phone), "phone", "Invalid phone number.")
 
 	// If there are any validation errors, render the page again with the errors.
 	if !form.Valid() {
