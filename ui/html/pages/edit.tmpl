@@ -1,9 +1,10 @@
-{{ define "title" }}Edit asdf Contact{{ end }}
+{{ define "title" }}Edit Contact{{ end }}
 
 {{ define "main" }}
   <form class="flex-column" action="/contacts/edit/{{ .Contact.ID }}" method="POST">
     <input type="hidden" name="csrf_token" value="{{ .CSRFToken }}" />
-    <input type="hidden" name="id" value="{{ .Contact.ID }}">
+    <input type="hidden" name="id" value="{{ if .Form.ID }}{{ .Form.ID }}{{ else }}{{ .Contact.ID }}{{ end }}">
+    <input type="hidden" name="version" value="{{ if .Form.Version }}{{ .Form.Version }}{{ else }}{{ .Contact.Version }}{{ end }}">
     <label for="first-input">
       First name:
       {{ with .Form.FieldErrors.first }}

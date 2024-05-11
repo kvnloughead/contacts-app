@@ -5,7 +5,7 @@
     <input type="hidden" name="csrf_token" value="{{ .CSRFToken }}" />
     <label for="first-input">
       First name:
-      <!-- If Form.FieldErrors.name is non-empty, it's value will be assigned to dot (.) and the error span will be rendered. -->
+      <!-- If Form.FieldErrors.first is non-empty, its value will be assigned to dot (.) and the error span will be rendered. -->
       {{ with .Form.FieldErrors.first }}
         <span class="error">{{ . }}</span>
       {{ end }}
