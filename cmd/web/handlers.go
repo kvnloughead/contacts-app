@@ -142,3 +142,31 @@ func (app *application) contactCreatePost(w http.ResponseWriter, r *http.Request
 	// Redirect to page containing the new contact.
 	http.Redirect(w, r, fmt.Sprintf("/contacts/view/%d", id), http.StatusSeeOther)
 }
+
+// contactEdit handles GET /contacts/edit/:id requests by displaying a form to
+// edit the contact.
+func (app *application) contactEdit(w http.ResponseWriter, r *http.Request) {
+	params := httprouter.ParamsFromContext(r.Context())
+
+	id, err := strconv.Atoi(params.ByName("id"))
+	if err != nil || id < 1 {
+		app.notFound(w)
+		return
+	}
+
+	contact, err := app.contacts.Get(id)
+	if err != nil {
+		if errors.Is(err, models.ErrNoRecord) {
+			app.notFound(w)
+		} else {
+			app.serverError(w, r, err)
+		}
+		return
+	}
+
+	data := app.newTemplateData(r)
+	data.Contact = contact
+	data.Form = contactCreateForm{}
+
+	app.render(w, r, http.StatusOK, "edit.tmpl", data)
+}

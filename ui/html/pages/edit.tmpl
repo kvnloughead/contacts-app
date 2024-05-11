@@ -1,0 +1,45 @@
+{{ define "title" }}Edit Contact{{ end }}
+
+{{ define "main" }}
+  <form class="flex-column" action="/contacts/edit{{ .Contact.ID }}" method="PUT">
+    <input type="hidden" name="csrf_token" value="{{ .CSRFToken }}" />
+    <label for="first-input">
+      First name:
+      {{ with .Form.FieldErrors.first }}
+        <span class="error">{{ . }}</span>
+      {{ end }}
+      <input
+        id="first-name-input"
+        name="first"
+        type="text"
+        value="{{ .Form.First }}"
+      />
+    </label>
+    <label for="last-name-input">
+      Last name:
+      {{ with .Form.FieldErrors.last }}
+        <span class="error">{{ . }}</span>
+      {{ end }}
+      <input id="last-name-input" name="last" type="text" value="{{ .Form.Last }}">
+    </label>
+
+    <label for="phone-input">
+      Phone number:
+      {{ with .Form.FieldErrors.phone }}
+        <span class="error">{{ . }}</span>
+      {{ end }}
+      <input id="phone-input" name="phone" type="text" value="{{ .Form.Phone }}">
+    </label>
+
+    <label for="email-input">
+      Email:
+      {{ with .Form.FieldErrors.email }}
+        <span class="error">{{ . }}</span>
+      {{ end }}
+      <input id="email-input" name="email" type="text" value="{{ .Form.Email }}">
+    </label>
+
+    </fieldset>
+    <input type="submit" value="Update contact" />
+  </form>
+{{ end }}
