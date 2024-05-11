@@ -1,8 +1,9 @@
-{{ define "title" }}Edit Contact{{ end }}
+{{ define "title" }}Edit asdf Contact{{ end }}
 
 {{ define "main" }}
-  <form class="flex-column" action="/contacts/edit{{ .Contact.ID }}" method="PUT">
+  <form class="flex-column" action="/contacts/edit/{{ .Contact.ID }}" method="POST">
     <input type="hidden" name="csrf_token" value="{{ .CSRFToken }}" />
+    <input type="hidden" name="id" value="{{ .Contact.ID }}">
     <label for="first-input">
       First name:
       {{ with .Form.FieldErrors.first }}
@@ -12,7 +13,7 @@
         id="first-name-input"
         name="first"
         type="text"
-        value="{{ .Form.First }}"
+        value="{{ if .Form.First }}{{ .Form.First }}{{ else }}{{ .Contact.First }}{{ end }}"
       />
     </label>
     <label for="last-name-input">
@@ -20,7 +21,7 @@
       {{ with .Form.FieldErrors.last }}
         <span class="error">{{ . }}</span>
       {{ end }}
-      <input id="last-name-input" name="last" type="text" value="{{ .Form.Last }}">
+      <input id="last-name-input" name="last" type="text" value="{{ if .Form.Last }}{{ .Form.Last }}{{ else }}{{ .Contact.Last }}{{ end }}">
     </label>
 
     <label for="phone-input">
@@ -28,7 +29,7 @@
       {{ with .Form.FieldErrors.phone }}
         <span class="error">{{ . }}</span>
       {{ end }}
-      <input id="phone-input" name="phone" type="text" value="{{ .Form.Phone }}">
+      <input id="phone-input" name="phone" type="text" value="{{ if .Form.Phone }}{{ .Form.Phone }}{{ else }}{{ .Contact.Phone }}{{ end }}">
     </label>
 
     <label for="email-input">
@@ -36,7 +37,7 @@
       {{ with .Form.FieldErrors.email }}
         <span class="error">{{ . }}</span>
       {{ end }}
-      <input id="email-input" name="email" type="text" value="{{ .Form.Email }}">
+      <input id="email-input" name="email" type="text" value="{{ if .Form.Email }}{{ .Form.Email }}{{ else }}{{ .Contact.Email }}{{ end }}">
     </label>
 
     </fieldset>
