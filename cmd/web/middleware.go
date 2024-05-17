@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"net/http"
+	"strings"
 
 	"github.com/justinas/nosurf"
 )
@@ -26,6 +27,10 @@ func secureHeaders(next http.Handler) http.Handler {
 
 // Middleware to logs each HTTP request, including the requests IP, protocol,
 // method, and URI.
+//
+// By default, logging of static files is suppressed for the following
+// extensions: css, js, png, jpg, jpeg, ico. This behavior can be changed by
+// supplying the CLI flag -verbose when running the application.
 func (app *application) logRequest(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		var (
@@ -34,6 +39,19 @@ func (app *application) logRequest(next http.Handler) http.Handler {
 			method   = r.Method
 			uri      = r.URL.RequestURI()
 		)
+
+		// Skip logging for static files, unless -verbose is true.
+		if !app.config.verbose {
+			if strings.HasSuffix(r.URL.Path, ".css") ||
+				strings.HasSuffix(r.URL.Path, ".js") ||
+				strings.HasSuffix(r.URL.Path, ".png") ||
+				strings.HasSuffix(r.URL.Path, ".jpg") ||
+				strings.HasSuffix(r.URL.Path, ".jpeg") ||
+				strings.HasSuffix(r.URL.Path, ".ico") {
+				next.ServeHTTP(w, r)
+				return
+			}
+		}
 
 		app.logger.Info("received request", "ip", ip, "protocol", protocol, "method", method, "uri", uri)
 

@@ -1,4 +1,4 @@
-include .envrc
+include .env
 
 # ============================================================
 # HELPERS
@@ -21,14 +21,14 @@ confirm:
 ## run/web: run the cmd/web application
 .PHONY: run/web
 run/web:
-	@go run ./cmd/web -db-dsn=${CONTACTS_DB_DSN} -port=4000
+	@go run ./cmd/web
 
 # Requires global installation: `go install github.com/cosmtrek/ air@latest`  
 # and the appropriate environmental variables. 
 ## run/air: run server using Air for live reloading. 
 .PHONY: run/air
 run/air:
-	@export CONTACTS_DB_DSN=$(CONTACTS_DB_DSN) && export PORT=$(PORT) && air
+	air
 
 ## db/psql: connect the the database using psql
 .PHONY: db/psql

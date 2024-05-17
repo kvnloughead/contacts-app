@@ -6,14 +6,17 @@ import (
 	"flag"
 	"fmt"
 	"html/template"
+	"log"
 	"log/slog"
 	"net/http"
 	"os"
+	"strconv"
 	"time"
 
 	"github.com/alexedwards/scs/postgresstore"
 	"github.com/alexedwards/scs/v2"
 	"github.com/go-playground/form/v4"
+	"github.com/joho/godotenv"
 	"github.com/kvnloughead/contacts-app/internal/models"
 
 	// Aliasing with a blank identifier because the driver isn't used explicitly.
@@ -31,10 +34,16 @@ type dbConfig struct {
 // specified as CLI flags when application starts, and have defaults provided
 // in case they are omitted.
 type config struct {
-	port  int
-	env   string
+	port int
+	env  string
+
+	// Sends full stack trace of server errors in response.
 	debug bool
-	db    dbConfig
+
+	// Provides verbose logging and responses in some situations. Currently only
+	// middleware.logRequest makes use of this.
+	verbose bool
+	db      dbConfig
 }
 
 // A struct containing application-wide dependencies.
@@ -48,6 +57,11 @@ type application struct {
 }
 
 func main() {
+	err := godotenv.Load()
+	if err != nil {
+		log.Print("Error loading .env file:", err)
+	}
+
 	var cfg config
 
 	flag.IntVar(&cfg.port, "port", 4000, "The port to run the app on.")
@@ -56,6 +70,7 @@ func main() {
 		"development",
 		"Environment (development|staging|production)")
 	flag.BoolVar(&cfg.debug, "debug", false, "Run in debug mode")
+	flag.BoolVar(&cfg.verbose, "verbose", false, "Provide verbose logging")
 
 	// Read DB-related settings from CLI flags.
 	flag.StringVar(&cfg.db.dsn, "db-dsn", "", "Postgresql DSN")
@@ -64,6 +79,26 @@ func main() {
 	flag.DurationVar(&cfg.db.maxIdleTime, "db-max-idle-time", 15*time.Minute, "Postgresql max connection idle time")
 
 	flag.Parse()
+
+	// Check for environmental variables
+	if cfg.db.dsn == "" {
+		cfg.db.dsn = os.Getenv("CONTACTS_DB_DSN")
+	}
+	if cfg.port == 4000 {
+		if portEnv, ok := os.LookupEnv("PORT"); ok {
+			port, err := strconv.Atoi(portEnv)
+			if err == nil {
+				cfg.port = port
+			}
+		}
+	}
+	if !cfg.verbose {
+		log.Print(os.Getenv("VERBOSE") == "true")
+		cfg.verbose = os.Getenv("VERBOSE") == "true"
+	}
+	if !cfg.debug {
+		cfg.debug = os.Getenv("DEBUG") == "true"
+	}
 
 	// Initialize structured logger to stdout with default settings.
 	logger := slog.New(slog.NewTextHandler(os.Stdout, &slog.HandlerOptions{
@@ -99,6 +134,7 @@ func main() {
 		templateCache:  templateCache,
 		formDecoder:    formDecoder,
 		sessionManager: sessionManager,
+		config:         cfg,
 	}
 
 	// Initial http server with address route handler.
