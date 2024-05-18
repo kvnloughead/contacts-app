@@ -7,9 +7,11 @@ import (
 	"fmt"
 	"net/http"
 	"runtime/debug"
+	"strconv"
 	"time"
 
 	"github.com/go-playground/form/v4"
+	"github.com/julienschmidt/httprouter"
 	"github.com/justinas/nosurf"
 )
 
@@ -113,6 +115,23 @@ func (app *application) decodePostForm(r *http.Request, dst any) error {
 	}
 
 	return nil
+}
+
+// readIdParam parses the parameters from the supplied request. If there is an
+// "id" param that can be converted into a positive integer, it will be returned
+// as an integer value.
+//
+// If there is no "id" param or it is in an invalid format an error will be
+// returned.
+func (app *application) readIdParam(r *http.Request) (int, error) {
+	params := httprouter.ParamsFromContext(r.Context())
+
+	id, err := strconv.Atoi(params.ByName("id"))
+	if err != nil || id < 1 {
+		return 0, err
+	}
+
+	return id, nil
 }
 
 // Returns true if the request is coming from an authenticated user. Authentication is determined by the presence and value of an isAuthenticatedContextKey in the request context.
