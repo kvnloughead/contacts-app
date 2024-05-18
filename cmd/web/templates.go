@@ -37,6 +37,7 @@ type templateData struct {
 	Flash           string
 	IsAuthenticated bool
 	CSRFToken       string
+	DeleteForm      bool
 }
 
 func newTemplateCache() (map[string]*template.Template, error) {

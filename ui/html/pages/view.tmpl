@@ -1,6 +1,9 @@
 {{ define "title" }}Contact #{{ .Contact.ID }}{{ end }}
 
 {{ define "main" }}
+  {{ if .DeleteForm }}
+    <form>THIS IS FORM</form>
+  {{ end }}
   {{ with .Contact }}
     <article class="contact">
       <h2>{{ .First }} {{ .Last }}</h2>

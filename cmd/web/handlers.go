@@ -232,3 +232,32 @@ func (app *application) contactEditPost(w http.ResponseWriter, r *http.Request) 
 	// Redirect to page containing the new contact.
 	http.Redirect(w, r, fmt.Sprintf("/contacts/view/%d", form.ID), http.StatusSeeOther)
 }
+
+func (app *application) contactDelete(w http.ResponseWriter, r *http.Request) {
+	params := httprouter.ParamsFromContext(r.Context())
+
+	// Once parsed, params are available by params.ByName().
+	id, err := strconv.Atoi(params.ByName("id"))
+	if err != nil || id < 1 {
+		app.notFound(w)
+		return
+	}
+
+	// Get the contact from the database, if it exists.
+	contact, err := app.contacts.Get(id)
+	if err != nil {
+		if errors.Is(err, models.ErrNoRecord) {
+			app.notFound(w)
+		} else {
+			app.serverError(w, r, err)
+		}
+		return
+	}
+
+	// Create template data and add the contact to it.
+	data := app.newTemplateData(r)
+	data.Contact = contact
+	data.DeleteForm = true
+
+	app.render(w, r, http.StatusOK, "view.tmpl", data)
+}
