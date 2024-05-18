@@ -2,7 +2,9 @@
 
 {{ define "main" }}
   {{ if .DeleteForm }}
-    <form>THIS IS FORM</form>
+    <form class="flex-column delete-form">
+      <button type="submit" autofocus>Delete contact?</button>
+    </form>
   {{ end }}
   {{ with .Contact }}
     <article class="contact">

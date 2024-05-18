@@ -5,7 +5,8 @@ input:not([type="submit"]) {
 }
 
 a.button,
-input[type="submit"] {
+input,
+button[type="submit"] {
   background-color: var(--button);
   border-radius: 3px;
   color: #ffffff;
@@ -88,4 +89,8 @@ form .error + input {
 
 .radio-buttons {
   display: flex;
+}
+
+.delete-form {
+  margin-bottom: var(--size-xl);
 }
