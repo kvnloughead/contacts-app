@@ -63,7 +63,7 @@ func (app *application) routes() http.Handler {
 	router.Handler(http.MethodPost, "/contacts/edit/:id", dynamic.ThenFunc(app.contactEditPost))
 
 	router.Handler(http.MethodGet, "/contacts/delete/:id", dynamic.ThenFunc(app.contactDelete))
-	// router.Handler(http.MethodPost, "/contact/delete/:id", dynamic.ThenFunc(app.contactDeletePost))
+	router.Handler(http.MethodPost, "/contacts/delete/:id", dynamic.ThenFunc(app.contactDeletePost))
 
 	router.Handler(http.MethodGet, "/contacts/create", dynamic.ThenFunc(app.contactCreate))
 	router.Handler(http.MethodPost, "/contacts/create", dynamic.ThenFunc(app.contactCreatePost))

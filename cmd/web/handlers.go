@@ -261,3 +261,30 @@ func (app *application) contactDelete(w http.ResponseWriter, r *http.Request) {
 
 	app.render(w, r, http.StatusOK, "view.tmpl", data)
 }
+
+// contactDeletePost handles requests to POST /contacts/delete/:id. If it finds
+// a document with the supplied ID it
+//
+//   - removes it from the database
+//   - flashes a success message
+//   - redirects user to the home page
+//
+// If the document is not found, a 404 response is sent.
+func (app *application) contactDeletePost(w http.ResponseWriter, r *http.Request) {
+	id, err := app.readIdParam(r)
+	if err != nil {
+		app.notFound(w)
+	}
+
+	err = app.contacts.Delete(id)
+	if err != nil {
+		if errors.Is(err, models.ErrRecordNotFound) {
+			app.notFound(w)
+		}
+		app.serverError(w, r, err)
+	}
+
+	app.sessionManager.Put(r.Context(), "flash", "Contact successfully deleted")
+
+	http.Redirect(w, r, "/", http.StatusSeeOther)
+}

@@ -28,6 +28,7 @@ type ContactModelInterface interface {
 	Get(id int) (Contact, error)
 	GetAll() ([]Contact, error)
 	Update(contact *Contact) error
+	Delete(id int) error
 }
 
 // Insert adds a new contact into the DB.
@@ -137,4 +138,28 @@ func (m *ContactModel) GetAll() ([]Contact, error) {
 	}
 
 	return contacts, nil
+}
+
+func (m *ContactModel) Delete(id int) error {
+	if id < 1 {
+		return ErrRecordNotFound
+	}
+
+	query := `DELETE FROM contacts WHERE id = $1`
+
+	result, err := m.DB.Exec(query, id)
+	if err != nil {
+		return err
+	}
+
+	rowsAffected, err := result.RowsAffected()
+	if err != nil {
+		return err
+	}
+
+	if rowsAffected == 0 {
+		return ErrNoRecord
+	}
+
+	return nil
 }

@@ -2,7 +2,12 @@
 
 {{ define "main" }}
   {{ if .DeleteForm }}
-    <form class="flex-column delete-form">
+    <form
+      class="flex-column delete-form"
+      method="POST"
+      action="/contacts/delete/{{ .Contact.ID }}"
+    >
+      <input type="hidden" name="csrf_token" value="{{ .CSRFToken }}" />
       <button type="submit" autofocus>Delete contact?</button>
     </form>
   {{ end }}
