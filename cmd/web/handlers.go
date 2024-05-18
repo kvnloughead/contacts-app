@@ -4,9 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
-	"strconv"
 
-	"github.com/julienschmidt/httprouter"
 	"github.com/kvnloughead/contacts-app/internal/models"
 	"github.com/kvnloughead/contacts-app/internal/validator"
 )
@@ -59,12 +57,9 @@ type contactFormFields struct {
 // View page for the contact with the given ID.
 // If there's no matching contact a 404 NotFound response is sent.
 func (app *application) contactView(w http.ResponseWriter, r *http.Request) {
-	// Params are stored by httprouter in the request context.
-	params := httprouter.ParamsFromContext(r.Context())
 
-	// Once parsed, params are available by params.ByName().
-	id, err := strconv.Atoi(params.ByName("id"))
-	if err != nil || id < 1 {
+	id, err := app.readIdParam(r)
+	if err != nil {
 		app.notFound(w)
 		return
 	}
@@ -149,10 +144,9 @@ func (app *application) contactCreatePost(w http.ResponseWriter, r *http.Request
 // contactEdit handles GET /contacts/edit/:id requests by displaying a form to
 // edit the contact.
 func (app *application) contactEdit(w http.ResponseWriter, r *http.Request) {
-	params := httprouter.ParamsFromContext(r.Context())
 
-	id, err := strconv.Atoi(params.ByName("id"))
-	if err != nil || id < 1 {
+	id, err := app.readIdParam(r)
+	if err != nil {
 		app.notFound(w)
 		return
 	}
@@ -234,11 +228,9 @@ func (app *application) contactEditPost(w http.ResponseWriter, r *http.Request) 
 }
 
 func (app *application) contactDelete(w http.ResponseWriter, r *http.Request) {
-	params := httprouter.ParamsFromContext(r.Context())
 
-	// Once parsed, params are available by params.ByName().
-	id, err := strconv.Atoi(params.ByName("id"))
-	if err != nil || id < 1 {
+	id, err := app.readIdParam(r)
+	if err != nil {
 		app.notFound(w)
 		return
 	}
