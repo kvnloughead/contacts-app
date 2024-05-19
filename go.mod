@@ -8,14 +8,11 @@ require (
 )
 
 require (
-	github.com/alexedwards/scs/mysqlstore v0.0.0-20240316134038-7e11d57e8885
+	github.com/alexedwards/scs/postgresstore v0.0.0-20240316134038-7e11d57e8885
+	github.com/go-playground/assert/v2 v2.0.1
+	github.com/joho/godotenv v1.5.1
 	github.com/julienschmidt/httprouter v1.3.0
 	github.com/justinas/alice v1.2.0
 	github.com/justinas/nosurf v1.1.1
 	github.com/lib/pq v1.10.9
-)
-
-require (
-	github.com/alexedwards/scs/postgresstore v0.0.0-20240316134038-7e11d57e8885 // indirect
-	github.com/joho/godotenv v1.5.1 // indirect
 )

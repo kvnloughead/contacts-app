@@ -35,7 +35,7 @@ func (app *application) serverError(
 	// Log error with stack trace.
 	app.logger.Error(err.Error(), "method", method, "uri", uri)
 
-	if app.config.debug {
+	if app.config.Debug {
 		body := fmt.Sprintf("%s\n%s", err, trace)
 		http.Error(w, body, http.StatusInternalServerError)
 		return
