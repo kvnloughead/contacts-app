@@ -27,6 +27,9 @@ type Config struct {
 	DB      DatabaseConfig
 }
 
+// DatabaseConfig is a struct that stores database configuration. The DSN field
+// will be necessary to connect to the database, and will be pulled from a .env
+// file if there is one.
 type DatabaseConfig struct {
 	DSN          string
 	MaxOpenConns int
@@ -34,11 +37,21 @@ type DatabaseConfig struct {
 	MaxIdleTime  time.Duration
 }
 
+// BoolFlag is a struct to store boolean flags. It implements the Set method
+// which is called when the flags are parsed. If a flag has been passed at the
+// command line the isSet field will be set to true. This can be used to
+// distinguish between a default 'false' value and an unset flag.
 type BoolFlag struct {
+	// If isSet is false, the flag has not been set.
 	isSet bool
+
+	// The value of the flag. If isSet is false, then this will be the default.
 	value bool
 }
 
+// The Set method is called whenever flag.Parse is called. If the string
+// argument can be converted into a bool, then this bool is set as the
+// BoolFlag's value and isSet is set to true.
 func (b *BoolFlag) Set(s string) error {
 	v, err := strconv.ParseBool(s)
 	if err != nil {
@@ -54,6 +67,14 @@ func (b *BoolFlag) String() string {
 	return fmt.Sprintf("%v", b.value)
 }
 
+// LoadConfig loads the configuration, returning the resulting Config struct.
+// It first loads environmental variables from the environment, including from
+// a .env file. Then, if any command line flags have been set, these will
+// override the evironmental variables.
+//
+// Reasonable defaults have been provided in most cases. The exception is the
+// -db-dsn flag, which defaults to an empty string. This must be provided as
+// an environmental variable or flag.
 func LoadConfig() Config {
 	err := godotenv.Load()
 	if err != nil {
@@ -61,7 +82,6 @@ func LoadConfig() Config {
 	}
 
 	var cfg Config
-	// var debug BoolFlag
 
 	flag.IntVar(&cfg.Port, "port", 4000, "The port to run the app on.")
 	flag.StringVar(&cfg.Env,
