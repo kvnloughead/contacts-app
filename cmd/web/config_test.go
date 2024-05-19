@@ -24,9 +24,9 @@ func TestLoadConfig(t *testing.T) {
 		{
 			name: "Environmental Variables Only",
 			envVars: map[string]string{
-				"CONTACTS_DB_DSN": "postgres://testuser:password@localhost/testdb",
-				"PORT":            "8080",
-				"VERBOSE":         "true",
+				"DB_DSN":  "postgres://testuser:password@localhost/testdb",
+				"PORT":    "8080",
+				"VERBOSE": "true",
 			},
 			args: []string{},
 			expectedConfig: Config{
@@ -54,9 +54,9 @@ func TestLoadConfig(t *testing.T) {
 		{
 			name: "Flags Override Environmental Variables",
 			envVars: map[string]string{
-				"CONTACTS_DB_DSN": "postgres://testuser:password@localhost/ENV_DB",
-				"PORT":            "5555",
-				"VERBOSE":         "true",
+				"DB_DSN":  "postgres://testuser:password@localhost/ENV_DB",
+				"PORT":    "5555",
+				"VERBOSE": "true",
 			},
 			args: []string{
 				"-db-dsn", "postgres://testuser:password@localhost/testdb",

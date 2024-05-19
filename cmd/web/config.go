@@ -81,7 +81,7 @@ func LoadConfig() Config {
 
 	// Check for environmental variables
 	if cfg.DB.DSN == "" {
-		cfg.DB.DSN = os.Getenv("CONTACTS_DB_DSN")
+		cfg.DB.DSN = os.Getenv("DB_DSN")
 	}
 
 	if cfg.Port == 4000 {

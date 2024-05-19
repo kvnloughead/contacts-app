@@ -45,7 +45,7 @@ run/air:
 ## db/psql: connect the the database using psql
 .PHONY: db/psql
 db/psql:
-	psql ${CONTACTS_DB_DSN}
+	psql ${DB_DSN}
 
 ## db/migrations/new name=$1: generate new migration files
 .PHONY: db/migrations/new
@@ -57,4 +57,4 @@ db/migrations/new:
 .PHONY: db/migrations/up
 db/migrations/up: confirm
 	@echo 'Running all up migrations'
-	migrate -path ./migrations -database ${CONTACTS_DB_DSN} up
+	migrate -path ./migrations -database ${DB_DSN} up
