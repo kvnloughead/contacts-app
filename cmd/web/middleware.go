@@ -41,7 +41,7 @@ func (app *application) logRequest(next http.Handler) http.Handler {
 		)
 
 		// Skip logging for static files, unless -verbose is true.
-		if !app.config.Verbose {
+		if !app.config.Verbose.value {
 			if strings.HasSuffix(r.URL.Path, ".css") ||
 				strings.HasSuffix(r.URL.Path, ".js") ||
 				strings.HasSuffix(r.URL.Path, ".png") ||

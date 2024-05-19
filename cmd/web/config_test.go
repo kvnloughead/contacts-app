@@ -32,7 +32,7 @@ func TestLoadConfig(t *testing.T) {
 			expectedConfig: Config{
 				DB:      DatabaseConfig{DSN: "postgres://testuser:password@localhost/testdb"},
 				Port:    8080,
-				Verbose: true,
+				Verbose: BoolFlag{isSet: false, value: true},
 			},
 			expectedError: false,
 		},
@@ -47,7 +47,7 @@ func TestLoadConfig(t *testing.T) {
 			expectedConfig: Config{
 				DB:      DatabaseConfig{DSN: "postgres://testuser:password@localhost/testdb"},
 				Port:    8080,
-				Verbose: true,
+				Verbose: BoolFlag{isSet: true, value: true},
 			},
 			expectedError: false,
 		},
@@ -56,17 +56,17 @@ func TestLoadConfig(t *testing.T) {
 			envVars: map[string]string{
 				"CONTACTS_DB_DSN": "postgres://testuser:password@localhost/ENV_DB",
 				"PORT":            "5555",
-				"VERBOSE":         "false",
+				"VERBOSE":         "true",
 			},
 			args: []string{
 				"-db-dsn", "postgres://testuser:password@localhost/testdb",
 				"-port", "8080",
-				"-verbose", "true",
+				"-verbose", "false",
 			},
 			expectedConfig: Config{
 				DB:      DatabaseConfig{DSN: "postgres://testuser:password@localhost/testdb"},
 				Port:    8080,
-				Verbose: true,
+				Verbose: BoolFlag{isSet: true, value: false},
 			},
 			expectedError: false,
 		},

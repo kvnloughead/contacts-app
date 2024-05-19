@@ -2,6 +2,7 @@ package main
 
 import (
 	"flag"
+	"fmt"
 	"log"
 	"os"
 	"strconv"
@@ -18,11 +19,11 @@ type Config struct {
 	Env  string
 
 	// Sends full stack trace of server errors in response.
-	Debug bool
+	Debug BoolFlag
 
 	// Provides verbose logging and responses in some situations. Currently only
 	// middleware.logRequest makes use of this.
-	Verbose bool
+	Verbose BoolFlag
 	DB      DatabaseConfig
 }
 
@@ -33,6 +34,26 @@ type DatabaseConfig struct {
 	MaxIdleTime  time.Duration
 }
 
+type BoolFlag struct {
+	isSet bool
+	value bool
+}
+
+func (b *BoolFlag) Set(s string) error {
+	v, err := strconv.ParseBool(s)
+	if err != nil {
+		return err
+	}
+
+	b.isSet = true
+	b.value = v
+	return nil
+}
+
+func (b *BoolFlag) String() string {
+	return fmt.Sprintf("%v", b.value)
+}
+
 func LoadConfig() Config {
 	err := godotenv.Load()
 	if err != nil {
@@ -40,14 +61,15 @@ func LoadConfig() Config {
 	}
 
 	var cfg Config
+	// var debug BoolFlag
 
 	flag.IntVar(&cfg.Port, "port", 4000, "The port to run the app on.")
 	flag.StringVar(&cfg.Env,
 		"env",
 		"development",
 		"Environment (development|staging|production)")
-	flag.BoolVar(&cfg.Debug, "debug", false, "Run in debug mode")
-	flag.BoolVar(&cfg.Verbose, "verbose", false, "Provide verbose logging")
+	flag.Var(&cfg.Debug, "debug", "Run in debug mode")
+	flag.Var(&cfg.Verbose, "verbose", "Provide verbose logging")
 
 	// Read DB-related settings from CLI flags.
 	flag.StringVar(&cfg.DB.DSN, "db-dsn", "", "Postgresql DSN")
@@ -61,6 +83,7 @@ func LoadConfig() Config {
 	if cfg.DB.DSN == "" {
 		cfg.DB.DSN = os.Getenv("CONTACTS_DB_DSN")
 	}
+
 	if cfg.Port == 4000 {
 		if portEnv, ok := os.LookupEnv("PORT"); ok {
 			port, err := strconv.Atoi(portEnv)
@@ -69,11 +92,12 @@ func LoadConfig() Config {
 			}
 		}
 	}
-	if !cfg.Verbose {
-		cfg.Verbose = os.Getenv("VERBOSE") == "true"
+
+	if !cfg.Verbose.isSet {
+		cfg.Verbose.value = os.Getenv("VERBOSE") == "true"
 	}
-	if !cfg.Debug {
-		cfg.Debug = os.Getenv("DEBUG") == "true"
+	if !cfg.Debug.isSet {
+		cfg.Debug.value = os.Getenv("DEBUG") == "true"
 	}
 
 	return cfg
