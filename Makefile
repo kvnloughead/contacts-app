@@ -7,8 +7,19 @@ include .env
 ## help: print this help message
 .PHONY: help
 help:
-	@echo 'Usage: '
+	@echo "\nUsage: \n"
 	@sed -n 's/^##//p' ${MAKEFILE_LIST} | column -t -s ':' | sed -e 's/^/ /'
+	@echo "\nFlags: \n"
+	@echo "  Command line flags are supported for run/web and run/air.\n  Specify them like this: "
+	@echo "\n\t  make FLAGS=\"-x -y\" command"
+	@echo "\n  For a list of implemented flags for the ./cmd/web application, \n  run 'make help/web'\n"
+	@echo "\nEnvirontmental Variables:\n"
+	@echo "  Environmental variables are supported for run/web and run/air.\n  They can be exported to the environment, or stored in a .env file.\n"
+
+## help/web: prints help from ./cmd/web (including flag descriptions)
+.PHONY: help/web
+help/web:
+	@go run ./cmd/web -help
 
 .PHONY: confirm
 confirm:
