@@ -67,6 +67,46 @@ func (b *BoolFlag) String() string {
 	return fmt.Sprintf("%v", b.value)
 }
 
+// loadIntFromEnvOrFlag loads an integer valued config option and assigns it to
+// the target int. This function should be called after flags are parsed with
+// flag.Parse.
+//
+// It then checks if the target has the default value. If not, no action is
+// taken, because the flags should override environmental variables. If it still
+// has the default value, the function checks for a matching environmental
+// variable. If it exists and can be converted into an integer, it is assigned
+// to the target.
+func loadIntFromEnvOrFlag(target *int, defaultVal int, envKey string) {
+	if *target == defaultVal {
+		if envVar, ok := os.LookupEnv(envKey); ok {
+			val, err := strconv.Atoi(envVar)
+			if err == nil {
+				*target = val
+			}
+		}
+	}
+}
+
+// loadDurationFromEnvOrFlag loads a time.Duration valued config option and
+// assigns it to the target. This function should be called after flags are
+// parsed with flag.Parse.
+//
+// It then checks if the target has the default value. If not, no action is
+// taken, because the flags should override environmental variables. If it still
+// has the default value, the function checks for a matching environmental
+// variable. If it exists and can be converted into a time.Duration, it is
+// assigned to the target.
+func loadDurationFromEnvOrFlag(target *time.Duration, defaultVal time.Duration, envKey string) {
+	if *target == defaultVal {
+		if envVar, ok := os.LookupEnv(envKey); ok {
+			val, err := time.ParseDuration(envVar)
+			if err == nil {
+				*target = val
+			}
+		}
+	}
+}
+
 // LoadConfig loads the configuration, returning the resulting Config struct.
 // It first loads environmental variables from the environment, including from
 // a .env file. Then, if any command line flags have been set, these will
@@ -99,20 +139,19 @@ func LoadConfig() Config {
 
 	flag.Parse()
 
-	// Check for environmental variables
+	// If DSN is not supplied by flag, load it from the environment. The DSN is
+	// required.
 	if cfg.DB.DSN == "" {
 		cfg.DB.DSN = os.Getenv("DB_DSN")
 	}
 
-	if cfg.Port == 4000 {
-		if portEnv, ok := os.LookupEnv("PORT"); ok {
-			port, err := strconv.Atoi(portEnv)
-			if err == nil {
-				cfg.Port = port
-			}
-		}
-	}
+	// Load integer and duration valued configuration options.
+	loadIntFromEnvOrFlag(&cfg.Port, 4000, "PORT")
+	loadIntFromEnvOrFlag(&cfg.DB.MaxOpenConns, 25, "DB_MAX_OPEN_CONNS")
+	loadIntFromEnvOrFlag(&cfg.DB.MaxIdleConns, 25, "DB_MAX_IDLE_CONNS")
+	loadDurationFromEnvOrFlag(&cfg.DB.MaxIdleTime, 15*time.Minute, "DB_MAX_IDLE_TIME")
 
+	// Load Boolean valued configuration options.
 	if !cfg.Verbose.isSet {
 		cfg.Verbose.value = os.Getenv("VERBOSE") == "true"
 	}
